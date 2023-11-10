@@ -277,9 +277,9 @@ mod tests {
 
     #[rstest]
     #[case::neutral(c::VehicleGear::GEAR_NEUTRAL)]
-    #[case::neutral(c::VehicleGear::GEAR_PARK)]
-    #[case::neutral(c::VehicleGear::GEAR_DRIVE)]
-    #[case::neutral(c::VehicleGear::GEAR_REVERSE)]
+    #[case::park(c::VehicleGear::GEAR_PARK)]
+    #[case::drive(c::VehicleGear::GEAR_DRIVE)]
+    #[case::reverse(c::VehicleGear::GEAR_REVERSE)]
     fn set_gear_test(local_port: u16, #[case] gear: c::VehicleGear) {
         let vhal = Vhal::new(local_port).unwrap();
         vhal.set_gear_selection(gear).unwrap();

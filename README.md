@@ -1,8 +1,11 @@
 # Vhal Emulator
 
+Based on Google's [vhal_emulator](https://android.googlesource.com/platform/packages/services/Car/+/refs/heads/main/tools/emulator/).
+
 This library provides a Vhal class which sends and receives messages to the
 vehicle HAL module on an Android Auto device.
-It uses port forwarding via ADB to communicate with the Android device.
+It uses port forwarding via ADB to communicate with the Android device and
+emulate devices connected to the CAN.
 
 ## Usage
 
@@ -28,6 +31,14 @@ Direct message manipulation is not allowed.
 
 Receiving can be achieved through `recv_cmd`, which return an `EmulatorMessage`
 with an status field set, which allows to check for errors.
+
+---
+**NOTE**
+
+`recv_msg` is a blocking call, so it may be desirable to set up a
+separate RX thread to handle any async messages coming from the device.
+
+---
 
 ```rust
 use vhal_emulator::vhal_consts_2_0 as c;

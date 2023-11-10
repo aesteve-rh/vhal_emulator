@@ -12,7 +12,7 @@ use std::{
     collections::HashMap, env, mem::MaybeUninit, net::SocketAddr, path::PathBuf, process::Command,
 };
 use thiserror::Error as ThisError;
-use vhal_consts_2_0::{self as vhal, VehicleProperty, VehiclePropertyType};
+use vhal_consts_2_0::{self as c, VehicleProperty, VehiclePropertyType};
 use VehicleHalProto::{EmulatorMessage, VehiclePropGet};
 
 #[macro_use]
@@ -98,6 +98,7 @@ pub fn adb_port_forwarding() -> Result<u16> {
     )
 }
 
+#[derive(Debug)]
 pub struct Vhal {
     socket: Socket,
     prop_to_type: HashMap<VehicleProperty, VehiclePropertyType>,
@@ -187,7 +188,7 @@ impl Vhal {
         Ok(())
     }
 
-    pub fn set_gear_selection(&self, gear: vhal::VehicleGear) -> Result<()> {
+    pub fn set_gear_selection(&self, gear: c::VehicleGear) -> Result<()> {
         let value = VehiclePropertyValue::Int32(gear as i32);
         self.set_property(VehicleProperty::GEAR_SELECTION, value, 0, None)
     }
@@ -275,11 +276,11 @@ mod tests {
     }
 
     #[rstest]
-    #[case::neutral(vhal::VehicleGear::GEAR_NEUTRAL)]
-    #[case::neutral(vhal::VehicleGear::GEAR_PARK)]
-    #[case::neutral(vhal::VehicleGear::GEAR_DRIVE)]
-    #[case::neutral(vhal::VehicleGear::GEAR_REVERSE)]
-    fn set_gear_test(local_port: u16, #[case] gear: vhal::VehicleGear) {
+    #[case::neutral(c::VehicleGear::GEAR_NEUTRAL)]
+    #[case::neutral(c::VehicleGear::GEAR_PARK)]
+    #[case::neutral(c::VehicleGear::GEAR_DRIVE)]
+    #[case::neutral(c::VehicleGear::GEAR_REVERSE)]
+    fn set_gear_test(local_port: u16, #[case] gear: c::VehicleGear) {
         let vhal = Vhal::new(local_port).unwrap();
         vhal.set_gear_selection(gear).unwrap();
         assert_eq!(

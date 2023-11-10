@@ -26,8 +26,9 @@ let v = ve::Vhal::new(local_port).unwrap();
 
 ### Send and receive a message
 
-A message can be sent using the various helper function that the library provides.
-Direct message manipulation is not allowed.
+A message can be sent using the various helper functions that the library provides.
+Direct message manipulation is not allowed. For most general interaction, you
+can use `set_property`.
 
 Receiving can be achieved through `recv_cmd`, which return an `EmulatorMessage`
 with an status field set, which allows to check for errors.
@@ -64,7 +65,7 @@ let reply = v.recv_cmd().unwrap();
 println!(reply);
 
 // Set the car gear to reverse
-vhal.set_gear_selection(c::VehicleGear::GEAR_REVERSE).unwrap()
+v.set_gear_selection(c::VehicleGear::GEAR_REVERSE).unwrap()
 
 // Get the response message to set_gear_selection
 let reply = v.recv_cmd().unwrap();
@@ -74,7 +75,7 @@ assert!(reply.status() == Status::RESULT_OK);
 
 ### Protocol Buffer
 This module relies on VehicleHalProto.rs being in sync with the protobuf in
-the VHAL. If the VehicleHalProto.proto file has changes, update the file
+the VHAL. If the VehicleHalProto.proto file has changed, update the file
 from the repository to generate an updated version. The update happens
 automatically at build time.
 

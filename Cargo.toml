@@ -1,0 +1,26 @@
+[package]
+name = "vhal_emulator"
+version = "0.1.0"
+edition = "2021"
+authors = ["Albert Esteve <aesteve@redhat.com>"]
+description = "A library to send and receive messages to the vehicle VAL module."
+readme = "README.md"
+keywords = ["vhal", "android", "aaos", "adb"]
+license = "GPL-2.0-or-later"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+protobuf = "3.3.0"
+structure = "0.1"
+thiserror = "1.0"
+socket2 = "0.5.5"
+num_enum = "0.7"
+log = "0.4"
+
+[build-dependencies]
+protobuf-codegen = "3.3.0"
+protoc-bin-vendored = "3.0.0"
+
+[dev-dependencies]
+rstest = "0.18.2"

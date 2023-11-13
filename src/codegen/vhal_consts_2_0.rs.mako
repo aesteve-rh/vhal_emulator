@@ -27,6 +27,7 @@ use num_enum::TryFromPrimitive;
 #[derive(TryFromPrimitive)]
 #[repr(i32)]
 % endif
+#[non_exhaustive]
 pub enum ${group_name} {
 <% values = [] %>\
 % for case in enum_object.cases:

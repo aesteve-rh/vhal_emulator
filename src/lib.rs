@@ -44,6 +44,8 @@ pub enum VhalError {
     PropertyTypeError,
 }
 
+#[derive(Debug, Clone)]
+#[non_exhaustive]
 pub enum VehiclePropertyValue {
     String(String),
     Bytes(Vec<u8>),
@@ -99,6 +101,7 @@ pub fn adb_port_forwarding() -> Result<u16> {
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct Vhal {
     socket: Socket,
     prop_to_type: HashMap<VehicleProperty, VehiclePropertyType>,

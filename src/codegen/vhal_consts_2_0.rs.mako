@@ -13,8 +13,8 @@
 #![allow(non_upper_case_globals)]
 
 use num_enum::TryFromPrimitive;
-
 % for group_name in data['enums']:
+
 <% enum_object = data['enums'][group_name] %>\
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 % if group_name == 'VehicleProperty':
@@ -38,8 +38,8 @@ pub enum ${group_name} {
 % endif
 % endfor
 }
-
 % if group_name == 'VehiclePropertyType':
+
 impl VehiclePropertyType {
     pub fn is_string(&self) -> bool {
         matches!(self, Self::STRING)
@@ -77,6 +77,5 @@ impl VehiclePropertyType {
         matches!(self, Self::MIXED)
     }
 }
-
 % endif
 % endfor

@@ -14,7 +14,8 @@
 
 use num_enum::TryFromPrimitive;
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehiclePropertyType {
@@ -69,7 +70,8 @@ impl VehiclePropertyType {
     }
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleArea {
@@ -82,7 +84,8 @@ pub enum VehicleArea {
     MASK = 0xf000000,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(u32)]
 #[non_exhaustive]
 pub enum VehiclePropertyGroup {
@@ -91,7 +94,9 @@ pub enum VehiclePropertyGroup {
     MASK = 0xf0000000,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, Hash, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(Hash)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleProperty {
@@ -256,7 +261,8 @@ pub enum VehicleProperty {
     ELECTRONIC_TOLL_COLLECTION_CARD_STATUS = 0x11400f3a,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ElectronicTollCollectionCardType {
@@ -265,7 +271,8 @@ pub enum ElectronicTollCollectionCardType {
     JP_ELECTRONIC_TOLL_COLLECTION_CARD_V2 = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ElectronicTollCollectionCardStatus {
@@ -275,7 +282,8 @@ pub enum ElectronicTollCollectionCardStatus {
     ELECTRONIC_TOLL_COLLECTION_CARD_NOT_INSERTED = 0x3,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(u32)]
 #[non_exhaustive]
 pub enum VehicleVendorPermission {
@@ -319,7 +327,8 @@ pub enum VehicleVendorPermission {
     PERMISSION_NOT_ACCESSIBLE = 0xf0000000,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleSeatOccupancyState {
@@ -328,7 +337,8 @@ pub enum VehicleSeatOccupancyState {
     OCCUPIED = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum EvsServiceType {
@@ -336,7 +346,8 @@ pub enum EvsServiceType {
     SURROUNDVIEW = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum EvsServiceState {
@@ -344,7 +355,8 @@ pub enum EvsServiceState {
     ON = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum EvsServiceRequestIndex {
@@ -352,7 +364,8 @@ pub enum EvsServiceRequestIndex {
     STATE = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleLightState {
@@ -361,7 +374,8 @@ pub enum VehicleLightState {
     DAYTIME_RUNNING = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleLightSwitch {
@@ -371,7 +385,8 @@ pub enum VehicleLightSwitch {
     AUTOMATIC = 0x100,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum EvConnectorType {
@@ -390,7 +405,8 @@ pub enum EvConnectorType {
     OTHER = 0x65,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum PortLocationType {
@@ -403,7 +419,8 @@ pub enum PortLocationType {
     REAR = 0x6,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum FuelType {
@@ -422,7 +439,8 @@ pub enum FuelType {
     FUEL_TYPE_OTHER = 0xc,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleHvacFanDirection {
@@ -434,7 +452,8 @@ pub enum VehicleHvacFanDirection {
     DEFROST_AND_FLOOR = 0x6,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleOilLevel {
@@ -445,7 +464,8 @@ pub enum VehicleOilLevel {
     ERROR = 0x4,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleApPowerStateConfigFlag {
@@ -453,7 +473,8 @@ pub enum VehicleApPowerStateConfigFlag {
     CONFIG_SUPPORT_TIMER_POWER_ON_FLAG = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleApPowerStateReq {
@@ -463,7 +484,8 @@ pub enum VehicleApPowerStateReq {
     FINISHED = 0x3,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleApPowerStateReqIndex {
@@ -471,7 +493,8 @@ pub enum VehicleApPowerStateReqIndex {
     ADDITIONAL = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleApPowerStateShutdownParam {
@@ -481,7 +504,8 @@ pub enum VehicleApPowerStateShutdownParam {
     SLEEP_IMMEDIATELY = 0x4,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleApPowerStateReport {
@@ -495,7 +519,8 @@ pub enum VehicleApPowerStateReport {
     SHUTDOWN_CANCELLED = 0x8,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleHwKeyInputAction {
@@ -503,7 +528,8 @@ pub enum VehicleHwKeyInputAction {
     ACTION_UP = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleDisplay {
@@ -511,7 +537,8 @@ pub enum VehicleDisplay {
     INSTRUMENT_CLUSTER = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleUnit {
@@ -549,7 +576,8 @@ pub enum VehicleUnit {
     KILOMETERS_PER_HOUR = 0x91,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehiclePropertyChangeMode {
@@ -558,7 +586,8 @@ pub enum VehiclePropertyChangeMode {
     CONTINUOUS = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehiclePropertyAccess {
@@ -568,7 +597,8 @@ pub enum VehiclePropertyAccess {
     READ_WRITE = 0x3,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehiclePropertyStatus {
@@ -577,7 +607,8 @@ pub enum VehiclePropertyStatus {
     ERROR = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleGear {
@@ -597,7 +628,8 @@ pub enum VehicleGear {
     GEAR_9 = 0x1000,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleAreaSeat {
@@ -612,7 +644,8 @@ pub enum VehicleAreaSeat {
     ROW_3_RIGHT = 0x400,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleAreaWindow {
@@ -628,7 +661,8 @@ pub enum VehicleAreaWindow {
     ROOF_TOP_2 = 0x20000,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleAreaDoor {
@@ -642,7 +676,8 @@ pub enum VehicleAreaDoor {
     REAR = 0x20000000,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleAreaMirror {
@@ -651,7 +686,8 @@ pub enum VehicleAreaMirror {
     DRIVER_CENTER = 0x4,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleTurnSignal {
@@ -660,7 +696,8 @@ pub enum VehicleTurnSignal {
     LEFT = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleIgnitionState {
@@ -672,7 +709,8 @@ pub enum VehicleIgnitionState {
     START = 0x5,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum SubscribeFlags {
@@ -681,7 +719,8 @@ pub enum SubscribeFlags {
     EVENTS_FROM_ANDROID = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum StatusCode {
@@ -693,7 +732,8 @@ pub enum StatusCode {
     INTERNAL_ERROR = 0x5,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VehicleAreaWheel {
@@ -704,7 +744,8 @@ pub enum VehicleAreaWheel {
     RIGHT_REAR = 0x8,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum Obd2FuelSystemStatus {
@@ -715,7 +756,8 @@ pub enum Obd2FuelSystemStatus {
     CLOSED_LOOP_BUT_FEEDBACK_FAULT = 0x10,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum Obd2IgnitionMonitorKind {
@@ -723,7 +765,8 @@ pub enum Obd2IgnitionMonitorKind {
     COMPRESSION = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum Obd2CommonIgnitionMonitors {
@@ -773,7 +816,8 @@ pub enum Obd2CompressionIgnitionMonitors {
     NMHC_CATALYST_INCOMPLETE = 0x20000,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum Obd2SecondaryAirStatus {
@@ -783,7 +827,8 @@ pub enum Obd2SecondaryAirStatus {
     PUMP_ON_FOR_DIAGNOSTICS = 0x8,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum Obd2FuelType {
@@ -813,7 +858,8 @@ pub enum Obd2FuelType {
     BIFUEL_RUNNING_DIESEL = 0x17,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum DiagnosticIntegerSensorIndex {
@@ -851,7 +897,8 @@ pub enum DiagnosticIntegerSensorIndex {
     ENGINE_PERCENT_TORQUE_DATA_POINT4 = 0x1f,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum DiagnosticFloatSensorIndex {
@@ -928,7 +975,8 @@ pub enum DiagnosticFloatSensorIndex {
     ENGINE_FUEL_RATE = 0x46,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VmsMessageType {
@@ -951,7 +999,8 @@ pub enum VmsMessageType {
     START_SESSION = 0x11,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum VmsBaseMessageIntegerValuesIndex {
@@ -1010,7 +1059,8 @@ pub enum VmsPublisherInformationIntegerValuesIndex {
     PUBLISHER_ID = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum UserFlags {
@@ -1023,7 +1073,8 @@ pub enum UserFlags {
     PROFILE = 0x20,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum InitialUserInfoRequestType {
@@ -1033,7 +1084,8 @@ pub enum InitialUserInfoRequestType {
     RESUME = 0x4,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum InitialUserInfoResponseAction {
@@ -1042,7 +1094,8 @@ pub enum InitialUserInfoResponseAction {
     CREATE = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum SwitchUserMessageType {
@@ -1053,7 +1106,8 @@ pub enum SwitchUserMessageType {
     ANDROID_POST_SWITCH = 0x5,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum SwitchUserStatus {
@@ -1061,7 +1115,8 @@ pub enum SwitchUserStatus {
     FAILURE = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum CreateUserStatus {
@@ -1069,7 +1124,8 @@ pub enum CreateUserStatus {
     FAILURE = 0x2,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum UserIdentificationAssociationType {
@@ -1080,7 +1136,8 @@ pub enum UserIdentificationAssociationType {
     CUSTOM_4 = 0x68,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum UserIdentificationAssociationValue {
@@ -1090,7 +1147,8 @@ pub enum UserIdentificationAssociationValue {
     NOT_ASSOCIATED_ANY_USER = 0x4,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum UserIdentificationAssociationSetValue {
@@ -1099,7 +1157,8 @@ pub enum UserIdentificationAssociationSetValue {
     DISASSOCIATE_ALL_USERS = 0x3,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum RotaryInputType {
@@ -1107,7 +1166,8 @@ pub enum RotaryInputType {
     ROTARY_INPUT_TYPE_AUDIO_VOLUME = 0x1,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum ProcessTerminationReason {
@@ -1116,7 +1176,8 @@ pub enum ProcessTerminationReason {
     MEMORY_OVERUSE = 0x3,
 }
 
-#[derive(Debug, Clone, Copy, Eq, PartialEq, TryFromPrimitive)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(TryFromPrimitive)]
 #[repr(i32)]
 #[non_exhaustive]
 pub enum CustomInputType {

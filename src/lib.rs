@@ -3,6 +3,7 @@
 
 include!(concat!(env!("OUT_DIR"), "/protos/mod.rs"));
 
+#[rustfmt::skip]
 pub mod vhal_consts_2_0;
 
 use log::{debug, warn};

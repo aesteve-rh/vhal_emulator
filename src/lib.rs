@@ -286,10 +286,8 @@ mod tests {
     fn set_gear_test(local_port: u16, #[case] gear: c::VehicleGear) {
         let vhal = Vhal::new(local_port).unwrap();
         vhal.set_gear_selection(gear).unwrap();
-        assert_eq!(
-            vhal.recv_cmd()
-                .is_ok_and(|cmd| cmd.has_status() && cmd.status() == Status::RESULT_OK),
-            true
-        );
+        assert!(vhal
+            .recv_cmd()
+            .is_ok_and(|cmd| cmd.has_status() && cmd.status() == Status::RESULT_OK));
     }
 }

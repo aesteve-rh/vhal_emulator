@@ -1,27 +1,9 @@
 #!/usr/bin/env python3
-#
+
 # Copyright (C) 2017 The Android Open Source Project
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# A parser for enum types defined in HIDL.
-# This script can parse HIDL files and generate a parse tree.
-# To use, import and call parse("path/to/file.hal")
-# It will return a Python dictionary with three keys:
-#  - header: an instance of Header
-#  - enums: a dictionary of EnumDecl objects by name
-#  - structs: a dictionary of StructDecl objects by name
-# It requires 'ply' (Python Lex/Yacc).
+# SPDX-License-Identifier: Apache-2.0
+
 from __future__ import print_function
 import ply
 tokens = ('package', 'import', 'enum', 'struct', 'typedef',

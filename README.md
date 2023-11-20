@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2023 Albert Esteve <aesteve@redhat.com>
+SPDX-License-Identifier: LGPL-3.0-or-later
+-->
+
 # VHAL Host Emulator
 
 Based on Google's [VHAL Emulator](https://android.googlesource.com/platform/packages/services/Car/+/refs/heads/main/tools/emulator/).

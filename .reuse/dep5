@@ -1,0 +1,10 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: vhal_emulator
+Upstream-Contact: Albert Esteve <aesteve@redhat.com>
+Source: https://github.com/aesteve-rh/vhal_emulator
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...

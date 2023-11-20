@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023 Albert Esteve <aesteve@redhat.com>
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 edition = "2018"
 format_generated_files = false
 format_code_in_doc_comments = true

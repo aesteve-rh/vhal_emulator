@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: Red Hat, Inc.
-# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 VENV_DIR = $(HOME)/.venv/vhal_emulator
 VENV = $(VENV_DIR)/bin

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # SPDX-FileCopyrightText: Red Hat, Inc.
-# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 from pathlib import Path
 from datetime import datetime

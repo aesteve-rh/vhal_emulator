@@ -3,24 +3,37 @@ SPDX-FileCopyrightText: 2023 Albert Esteve <aesteve@redhat.com>
 SPDX-License-Identifier: LGPL-3.0-or-later
 -->
 
-# VHAL Host Emulator
+# VHAL Emulator
 
-Based on Google's [VHAL Emulator](https://android.googlesource.com/platform/packages/services/Car/+/refs/heads/main/tools/emulator/).
+Based on Google's [VHAL Host Emulator](https://android.googlesource.com/platform/packages/services/Car/+/refs/heads/main/tools/emulator/).
 
-This library provides a Vhal class which sends and receives messages to the
-vehicle HAL module on an Android Auto device.
-It uses port forwarding via ADB to communicate with the Android device and
-emulate devices connected to the CAN.
+`vhal_emulator` is a Rust library designed to simulate CAN bus communication
+with an Android Automotive system. The emulator leverages sockets and port
+forwarding through ADB (Android Debug Bridge) to facilitate communication
+between the emulator and the Android Automotive system.
+
+## Features
+
+- CAN Bus Simulation: Emulate CAN bus messages for testing Android Automotive
+  Vehicle Hardware Abstraction Layer (VHAL) implementations.
+
+- Socket Communication: Utilize sockets for communication between the emulator
+  and the Android Automotive system.
+
+- ADB Port Forwarding: Enable seamless communication by leveraging ADB port
+  forwarding to establish a connection between the emulator and the Android device.
 
 ## Usage
 
-### Open a socket connection
+### ADB Port Forwarding
 
 First we need to connect to an Android Auto device running a Vehicle HAL with simulator.
-To do that, this library uses adb por forwarding to a hardcoded remote port.
-Currently, no device can be specified, so it connects as default device.
+To do that, this library uses ADB port forwarding to a hardcoded remote port.
+Ensure that ADB is installed on your machine, or give the path to the directory
+containing the binary through the `ADB_PATH` environment variable.
 
-We can use the local port returned to open a socket connection:
+You can let the library do the binding for you, using a random unused port on
+the host (note: currently, no device can be specified, so it binds as default device):
 
 ```rust
 use vhal_emulator as ve;
@@ -29,14 +42,25 @@ let local_port: u16 = ve::adb_port_forwarding().expect("Could not run adb for po
 let v = ve::Vhal::new(local_port).unwrap();
 ```
 
-### Send and receive a message
+Otherwise, you can manually forward the required port to establish a connection
+with the Android device, and then use it in the `Vhal` instantiation call.
 
-A message can be sent using the various helper functions that the library provides.
+```shell
+    adb forward port tcp:0 tcp:33452      # random free port returned
+    adb forward port tcp:12345 tcp:33452  # explicitely select the port to be used
+```
+
+### Send and receive messages
+
+Use the emulator to simulate CAN bus messages and test the VHAL implementation
+on the Android Automotive system.
+
+Messages can be sent using the various helper functions that the library provides.
 Direct message manipulation is not allowed. For most general interaction, you
 can use `set_property`.
 
-Receiving can be achieved through `recv_cmd`, which return an `EmulatorMessage`
-with an status field set, which allows to check for errors.
+Receiving a message is done through `recv_cmd`, which returns an `EmulatorMessage`
+with an status field set, which allows to check for communication errors.
 
 ---
 **NOTE**
@@ -81,14 +105,13 @@ assert!(reply.status() == Status::RESULT_OK);
 ### Protocol Buffer
 
 This module relies on `VehicleHalProto.rs` being in sync with the protobuf in
-the VHAL. If the `VehicleHalProto.proto` file has changed, update the file
+the Vehicle HAL. If the `VehicleHalProto.proto` file has changed, update the file
 in the repository to generate an updated version. The update happens
 automatically at build time.
 
 ## Testing
 
-Test assumes there is a running AAOS VM. Make sure you have `adb` binary
-accessible in your path, or excplicitely set `ADP_PATH` env var.
+Test assumes there is a running AAOS VM. Again, make sure you also have ADB installed.
 
 ```shell
 $ ADB_PATH=/path/to/adb/bin cargo test
@@ -112,6 +135,8 @@ $ deactivate
 
 ## Contributing
 
+Contributions are welcome! Feel free to open issues or pull requests.
+
 Please make sure your patches have all commits signed-up, and that you
 have passed `fmt` and `clippy`.
 
@@ -119,3 +144,12 @@ have passed `fmt` and `clippy`.
 $ cargo +nightly fmt
 $ cargo clippy --all-features --all-targets -- -D warnings -D clippy::undocumented_unsafe_blocks
 ```
+
+## License
+
+This project is licensed under the LGPL-3.0-or-later License.
+
+Files coming from the Android Open Source Project, are
+licensed under the Apache-2.0 license.
+
+For more details, see the [LICENSES](LICENSES) folder.

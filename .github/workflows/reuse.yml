@@ -1,6 +1,5 @@
-# SPDX-FileCopyrightText: 2022 Free Software Foundation Europe e.V. <https://fsfe.org>
-#
-# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: Red Hat, Inc.
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 name: REUSE Compliance Check
 

@@ -112,9 +112,11 @@ automatically at build time.
 ## Testing
 
 Test assumes there is a running AAOS VM. Again, make sure you also have ADB installed.
+Also, tests may interfere when run in parallel. To avoid false negatives, make
+sure you force a single thread.
 
 ```shell
-$ ADB_PATH=/path/to/adb/bin cargo test
+$ ADB_PATH=/path/to/adb/bin cargo test --lib -- --test-threads=1
 ```
 
 ## Regenerating vhal constants

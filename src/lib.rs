@@ -192,6 +192,18 @@ impl Vhal {
         Ok(())
     }
 
+    pub fn get_property(&self, prop: VehicleProperty, area_id: i32) -> Result<()> {
+        let mut cmd = EmulatorMessage::new();
+        let mut vhal_prop_get = VehicleHalProto::VehiclePropGet::new();
+        cmd.set_msg_type(VehicleHalProto::MsgType::GET_PROPERTY_CMD);
+        vhal_prop_get.set_prop(prop as i32);
+        vhal_prop_get.set_area_id(area_id);
+        cmd.prop.push(vhal_prop_get);
+        self.send_cmd(cmd)?;
+
+        Ok(())
+    }
+
     pub fn set_gear_selection(&self, gear: c::VehicleGear) -> Result<()> {
         let value = VehiclePropertyValue::Int32(gear as i32);
         self.set_property(VehicleProperty::GEAR_SELECTION, value, 0, None)

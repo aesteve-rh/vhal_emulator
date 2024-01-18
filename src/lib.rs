@@ -23,6 +23,10 @@ const REMOTE_PORT: u16 = 33452;
 
 pub type Result<T> = std::result::Result<T, VhalError>;
 
+pub trait GetPropertyValue {
+    fn get_value(&self) -> Result<VehiclePropertyValue>;
+}
+
 #[derive(Debug, ThisError)]
 pub enum VhalError {
     #[error("adb command failed: {0}")]
@@ -39,6 +43,16 @@ pub enum VhalError {
     ReceiveMessageError(std::io::Error),
     #[error("Unexpected message length, expected {0}, found {1}")]
     ReceiveMessageLengthError(usize, usize),
+    #[error("Unexpected message status: {0}")]
+    ReceiveMessageStatusError(usize),
+    #[error("Unexpected message type: {0}")]
+    ReceiveMessageTypeError(usize),
+    #[error("Unexpected message value type")]
+    ReceiveMessageValueTypeError,
+    #[error("Received message invalid value")]
+    ReceiveMessageValueError,
+    #[error("Received too many message values, expected 1, found {0}")]
+    ReceiveMessageTooManyValuesError(usize),
     #[error("Invalid property ID: {0}")]
     PropertyError(i32),
     #[error("Mismatched property type received")]
@@ -66,14 +80,80 @@ impl VehiclePropertyValue {
         }
     }
 
-    fn check_valid_type(&self, vhal_prop_type: &VehiclePropertyType) -> bool {
+    fn from_prop(
+        prop_type: &VehiclePropertyType,
+        prop_value: &VehicleHalProto::VehiclePropValue,
+    ) -> Result<Self> {
+        Ok(match *prop_type {
+            VehiclePropertyType::STRING => Self::String(
+                prop_value
+                    .string_value
+                    .as_ref()
+                    .ok_or(VhalError::PropertyTypeError)?
+                    .to_owned(),
+            ),
+            VehiclePropertyType::BYTES => Self::Bytes(
+                prop_value
+                    .bytes_value
+                    .as_ref()
+                    .ok_or(VhalError::PropertyTypeError)?
+                    .to_vec(),
+            ),
+            VehiclePropertyType::BOOLEAN => Self::Int32(
+                *prop_value
+                    .int32_values
+                    .first()
+                    .ok_or(VhalError::PropertyTypeError)?,
+            ),
+            VehiclePropertyType::INT32 => Self::Int32(
+                *prop_value
+                    .int32_values
+                    .first()
+                    .ok_or(VhalError::PropertyTypeError)?,
+            ),
+            VehiclePropertyType::INT64 => Self::Int64(
+                *prop_value
+                    .int64_values
+                    .first()
+                    .ok_or(VhalError::PropertyTypeError)?,
+            ),
+            VehiclePropertyType::FLOAT => Self::Float(
+                *prop_value
+                    .float_values
+                    .first()
+                    .ok_or(VhalError::PropertyTypeError)?,
+            ),
+            _ => return Err(VhalError::ReceiveMessageValueTypeError),
+        })
+    }
+
+    fn check_valid_type(&self, prop_type: &VehiclePropertyType) -> bool {
         match self {
-            Self::String(_) => vhal_prop_type.is_string(),
-            Self::Int32(_) => vhal_prop_type.is_int32(),
-            Self::Int64(_) => vhal_prop_type.is_int64(),
-            Self::Float(_) => vhal_prop_type.is_float(),
-            Self::Bytes(_) => vhal_prop_type.is_bytes(),
+            Self::String(_) => prop_type.is_string(),
+            Self::Int32(_) => prop_type.is_int32(),
+            Self::Int64(_) => prop_type.is_int64(),
+            Self::Float(_) => prop_type.is_float(),
+            Self::Bytes(_) => prop_type.is_bytes(),
         }
+    }
+}
+
+impl GetPropertyValue for EmulatorMessage {
+    fn get_value(&self) -> Result<VehiclePropertyValue> {
+        if self.value.len() != 1 {
+            return Err(VhalError::ReceiveMessageTooManyValuesError(
+                self.value.len(),
+            ));
+        }
+
+        let value = self.value.first().unwrap();
+        let val_type = VehiclePropertyType::try_from(match value.value_type {
+            Some(val) => val,
+            None => return Err(VhalError::ReceiveMessageValueError),
+        })
+        .map_err(|_| VhalError::ReceiveMessageValueTypeError)?;
+
+        VehiclePropertyValue::from_prop(&val_type, value)
     }
 }
 
@@ -209,6 +289,23 @@ impl Vhal {
         self.set_property(VehicleProperty::GEAR_SELECTION, value, 0, None)
     }
 
+    pub fn get_gear_selection(&self) -> Result<c::VehicleGear> {
+        self.get_property(VehicleProperty::GEAR_SELECTION, 0)?;
+        let resp = self.recv_cmd()?;
+        if resp.status() != VehicleHalProto::Status::RESULT_OK {
+            return Err(VhalError::ReceiveMessageStatusError(resp.status() as usize));
+        }
+        if resp.msg_type() != VehicleHalProto::MsgType::GET_PROPERTY_RESP {
+            return Err(VhalError::ReceiveMessageTypeError(resp.msg_type() as usize));
+        }
+
+        Ok(c::VehicleGear::try_from(match resp.get_value()? {
+            VehiclePropertyValue::Int32(value) => value,
+            _ => return Err(VhalError::ReceiveMessageValueTypeError),
+        })
+        .map_err(|_| VhalError::ReceiveMessageValueError))?
+    }
+
     fn send_cmd(&self, cmd: EmulatorMessage) -> Result<()> {
         debug!("Sending command: {:?}", cmd);
         let msg_bytes = cmd.write_to_bytes().expect("msg");
@@ -296,11 +393,14 @@ mod tests {
     #[case::park(c::VehicleGear::GEAR_PARK)]
     #[case::drive(c::VehicleGear::GEAR_DRIVE)]
     #[case::reverse(c::VehicleGear::GEAR_REVERSE)]
-    fn set_gear_test(local_port: u16, #[case] gear: c::VehicleGear) {
+    fn gear_selection_test(local_port: u16, #[case] gear: c::VehicleGear) {
         let vhal = Vhal::new(local_port).unwrap();
         vhal.set_gear_selection(gear).unwrap();
         assert!(vhal
             .recv_cmd()
             .is_ok_and(|cmd| cmd.has_status() && cmd.status() == Status::RESULT_OK));
+        assert!(vhal
+            .get_gear_selection()
+            .is_ok_and(|rcv_gear| rcv_gear == gear));
     }
 }

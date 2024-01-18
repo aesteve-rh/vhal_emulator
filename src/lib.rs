@@ -27,6 +27,15 @@ pub trait GetPropertyValue {
     fn get_value(&self) -> Result<VehiclePropertyValue>;
 }
 
+pub trait CheckResponse {
+    fn is_valid(&self, exp_type: VehicleHalProto::MsgType) -> Result<()>;
+}
+
+pub trait ExpectType {
+    fn expect_i32(&self) -> Result<i32>;
+    fn expect_f32(&self) -> Result<f32>;
+}
+
 #[derive(Debug, ThisError)]
 pub enum VhalError {
     #[error("adb command failed: {0}")]
@@ -154,6 +163,35 @@ impl GetPropertyValue for EmulatorMessage {
         .map_err(|_| VhalError::ReceiveMessageValueTypeError)?;
 
         VehiclePropertyValue::from_prop(&val_type, value)
+    }
+}
+
+impl CheckResponse for EmulatorMessage {
+    fn is_valid(&self, exp_type: VehicleHalProto::MsgType) -> Result<()> {
+        if self.status() != VehicleHalProto::Status::RESULT_OK {
+            return Err(VhalError::ReceiveMessageStatusError(self.status() as usize));
+        }
+        if self.msg_type() != exp_type {
+            return Err(VhalError::ReceiveMessageTypeError(self.msg_type() as usize));
+        }
+
+        Ok(())
+    }
+}
+
+impl ExpectType for EmulatorMessage {
+    fn expect_i32(&self) -> Result<i32> {
+        Ok(match self.get_value()? {
+            VehiclePropertyValue::Int32(value) => value,
+            _ => return Err(VhalError::ReceiveMessageValueTypeError),
+        })
+    }
+
+    fn expect_f32(&self) -> Result<f32> {
+        Ok(match self.get_value()? {
+            VehiclePropertyValue::Float(value) => value,
+            _ => return Err(VhalError::ReceiveMessageValueTypeError),
+        })
     }
 }
 
@@ -292,18 +330,34 @@ impl Vhal {
     pub fn get_gear_selection(&self) -> Result<c::VehicleGear> {
         self.get_property(VehicleProperty::GEAR_SELECTION, 0)?;
         let resp = self.recv_cmd()?;
-        if resp.status() != VehicleHalProto::Status::RESULT_OK {
-            return Err(VhalError::ReceiveMessageStatusError(resp.status() as usize));
-        }
-        if resp.msg_type() != VehicleHalProto::MsgType::GET_PROPERTY_RESP {
-            return Err(VhalError::ReceiveMessageTypeError(resp.msg_type() as usize));
-        }
+        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
 
-        Ok(c::VehicleGear::try_from(match resp.get_value()? {
-            VehiclePropertyValue::Int32(value) => value,
-            _ => return Err(VhalError::ReceiveMessageValueTypeError),
-        })
-        .map_err(|_| VhalError::ReceiveMessageValueError))?
+        Ok(c::VehicleGear::try_from(resp.expect_i32()?)
+            .map_err(|_| VhalError::ReceiveMessageValueError)?)
+    }
+
+    pub fn set_vehicle_speed(&self, speed: f32) -> Result<()> {
+        let value = VehiclePropertyValue::Float(speed);
+        self.set_property(VehicleProperty::PERF_VEHICLE_SPEED, value, 0, None)
+    }
+
+    pub fn get_vehicle_speed(&self) -> Result<f32> {
+        self.get_property(VehicleProperty::PERF_VEHICLE_SPEED, 0)?;
+        let resp = self.recv_cmd()?;
+        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        resp.expect_f32()
+    }
+
+    pub fn set_vehicle_display_speed(&self, speed: f32) -> Result<()> {
+        let value = VehiclePropertyValue::Float(speed);
+        self.set_property(VehicleProperty::PERF_VEHICLE_SPEED_DISPLAY, value, 0, None)
+    }
+
+    pub fn get_vehicle_display_speed(&self) -> Result<f32> {
+        self.get_property(VehicleProperty::PERF_VEHICLE_SPEED_DISPLAY, 0)?;
+        let resp = self.recv_cmd()?;
+        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        resp.expect_f32()
     }
 
     fn send_cmd(&self, cmd: EmulatorMessage) -> Result<()> {
@@ -402,5 +456,30 @@ mod tests {
         assert!(vhal
             .get_gear_selection()
             .is_ok_and(|rcv_gear| rcv_gear == gear));
+    }
+
+    #[rstest]
+    #[case::stopped(0.0)]
+    #[case::slow(30.0)]
+    #[case::city(50.0)]
+    #[case::road(80.0)]
+    #[case::highway(120.0)]
+    #[case::reverse(-10.0)]
+    fn speed_test(local_port: u16, #[case] speed: f32) {
+        let vhal = Vhal::new(local_port).unwrap();
+        vhal.set_vehicle_speed(speed).unwrap();
+        assert!(vhal
+            .recv_cmd()
+            .is_ok_and(|cmd| cmd.has_status() && cmd.status() == Status::RESULT_OK));
+        assert!(vhal
+            .get_vehicle_speed()
+            .is_ok_and(|rcv_speed| rcv_speed == speed));
+        vhal.set_vehicle_display_speed(speed).unwrap();
+        assert!(vhal
+            .recv_cmd()
+            .is_ok_and(|cmd| cmd.has_status() && cmd.status() == Status::RESULT_OK));
+        assert!(vhal
+            .get_vehicle_display_speed()
+            .is_ok_and(|rcv_speed| rcv_speed == speed));
     }
 }

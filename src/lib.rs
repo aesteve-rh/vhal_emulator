@@ -329,8 +329,7 @@ impl Vhal {
 
     pub fn get_gear_selection(&self) -> Result<c::VehicleGear> {
         self.get_property(VehicleProperty::GEAR_SELECTION, 0)?;
-        let resp = self.recv_cmd()?;
-        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        let resp = self.recv_retry()?;
 
         Ok(c::VehicleGear::try_from(resp.expect_i32()?)
             .map_err(|_| VhalError::ReceiveMessageValueError)?)
@@ -343,8 +342,8 @@ impl Vhal {
 
     pub fn get_vehicle_speed(&self) -> Result<f32> {
         self.get_property(VehicleProperty::PERF_VEHICLE_SPEED, 0)?;
-        let resp = self.recv_cmd()?;
-        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        let resp = self.recv_retry()?;
+
         resp.expect_f32()
     }
 
@@ -355,8 +354,8 @@ impl Vhal {
 
     pub fn get_vehicle_display_speed(&self) -> Result<f32> {
         self.get_property(VehicleProperty::PERF_VEHICLE_SPEED_DISPLAY, 0)?;
-        let resp = self.recv_cmd()?;
-        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        let resp = self.recv_retry()?;
+
         resp.expect_f32()
     }
 
@@ -426,6 +425,17 @@ impl Vhal {
         debug!("Message received: {}", msg);
 
         Ok(msg)
+    }
+
+    fn recv_retry(&self) -> Result<EmulatorMessage> {
+        let mut resp = self.recv_cmd()?;
+        if resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP).is_err() {
+            // Allow a single retry.
+            resp = self.recv_cmd()?;
+            resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        }
+
+        Ok(resp)
     }
 }
 

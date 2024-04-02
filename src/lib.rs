@@ -74,6 +74,7 @@ pub enum VehiclePropertyValue {
     String(String),
     Bytes(Vec<u8>),
     Int32(i32),
+    Int32s(Vec<i32>),
     Int64(i64),
     Float(f32),
 }
@@ -83,6 +84,7 @@ impl VehiclePropertyValue {
         match self {
             Self::String(v) => prop_value.set_string_value(v.to_owned()),
             Self::Int32(v) => prop_value.int32_values.push(*v),
+            Self::Int32s(v) => prop_value.int32_values.extend(v),
             Self::Int64(v) => prop_value.int64_values.push(*v),
             Self::Float(v) => prop_value.float_values.push(*v),
             Self::Bytes(v) => prop_value.set_bytes_value(v.clone()),
@@ -120,6 +122,11 @@ impl VehiclePropertyValue {
                     .first()
                     .ok_or(VhalError::PropertyTypeError)?,
             ),
+            VehiclePropertyType::INT32_VEC => Self::Int32s(
+                prop_value
+                    .int32_values
+                    .to_vec(),
+            ),
             VehiclePropertyType::INT64 => Self::Int64(
                 *prop_value
                     .int64_values
@@ -140,6 +147,7 @@ impl VehiclePropertyValue {
         match self {
             Self::String(_) => prop_type.is_string(),
             Self::Int32(_) => prop_type.is_int32(),
+            Self::Int32s(_) => prop_type.is_int32s(),
             Self::Int64(_) => prop_type.is_int64(),
             Self::Float(_) => prop_type.is_float(),
             Self::Bytes(_) => prop_type.is_bytes(),
@@ -358,6 +366,12 @@ impl Vhal {
         let resp = self.recv_cmd()?;
         resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
         resp.expect_f32()
+    }
+
+    pub fn ap_power_state_request(&self, request: c::VehicleApPowerStateReq,
+                                  param: c::VehicleApPowerStateShutdownParam) -> Result<()> {
+        let value = VehiclePropertyValue::Int32s(vec![request as i32, param as i32]);
+        self.set_property(VehicleProperty::AP_POWER_STATE_REQ, value, 0, None)
     }
 
     fn send_cmd(&self, cmd: EmulatorMessage) -> Result<()> {

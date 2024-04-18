@@ -374,6 +374,30 @@ impl Vhal {
         self.set_property(VehicleProperty::AP_POWER_STATE_REQ, value, 0, None)
     }
 
+    pub fn set_battery_level(&self, speed: f32) -> Result<()> {
+        let value = VehiclePropertyValue::Float(speed);
+        self.set_property(VehicleProperty::EV_BATTERY_LEVEL, value, 0, None)
+    }
+
+    pub fn get_battery_level(&self) -> Result<f32> {
+        self.get_property(VehicleProperty::EV_BATTERY_LEVEL, 0)?;
+        let resp = self.recv_cmd()?;
+        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        resp.expect_f32()
+    }
+
+    pub fn set_nominal_battery_capacity(&self, speed: f32) -> Result<()> {
+        let value = VehiclePropertyValue::Float(speed);
+        self.set_property(VehicleProperty::INFO_EV_BATTERY_CAPACITY, value, 0, None)
+    }
+
+    pub fn get_nominal_battery_capacity(&self) -> Result<f32> {
+        self.get_property(VehicleProperty::INFO_EV_BATTERY_CAPACITY, 0)?;
+        let resp = self.recv_cmd()?;
+        resp.is_valid(VehicleHalProto::MsgType::GET_PROPERTY_RESP)?;
+        resp.expect_f32()
+    }
+
     fn send_cmd(&self, cmd: EmulatorMessage) -> Result<()> {
         debug!("Sending command: {:?}", cmd);
         let msg_bytes = cmd.write_to_bytes().expect("msg");

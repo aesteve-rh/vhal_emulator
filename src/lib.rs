@@ -374,8 +374,8 @@ impl Vhal {
         self.set_property(VehicleProperty::AP_POWER_STATE_REQ, value, 0, None)
     }
 
-    pub fn set_battery_level(&self, speed: f32) -> Result<()> {
-        let value = VehiclePropertyValue::Float(speed);
+    pub fn set_battery_level(&self, level: f32) -> Result<()> {
+        let value = VehiclePropertyValue::Float(level);
         self.set_property(VehicleProperty::EV_BATTERY_LEVEL, value, 0, None)
     }
 
@@ -386,8 +386,8 @@ impl Vhal {
         resp.expect_f32()
     }
 
-    pub fn set_nominal_battery_capacity(&self, speed: f32) -> Result<()> {
-        let value = VehiclePropertyValue::Float(speed);
+    pub fn set_nominal_battery_capacity(&self, capacity: f32) -> Result<()> {
+        let value = VehiclePropertyValue::Float(capacity);
         self.set_property(VehicleProperty::INFO_EV_BATTERY_CAPACITY, value, 0, None)
     }
 
